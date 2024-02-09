@@ -29,7 +29,7 @@ class RootPage {
   List<Component> elems;
   String title;
   String Function(String, String) pageRoot = root;
-  RootPage({String Function(String)? customRoot, required this.title, required this.elems}){
+  RootPage({String Function(String, String)? customRoot, required this.title, required this.elems}){
     if(customRoot != null){
       pageRoot == customRoot;
     }

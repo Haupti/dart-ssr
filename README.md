@@ -20,3 +20,5 @@ currently implemented is: 0-3
 * 1 - basic (just read regular stuff)
 * 2 - mod (moderator)
 * 3 - admin
+
+this only allowes basic auth.
