@@ -31,7 +31,7 @@ class RootPage {
   String Function(String, String) pageRoot = root;
   RootPage({String Function(String, String)? customRoot, required this.title, required this.elems}){
     if(customRoot != null){
-      pageRoot == customRoot;
+      pageRoot = customRoot;
     }
   }
 
