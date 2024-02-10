@@ -94,3 +94,7 @@ void okPartialHtmlResponse(SsrResponse response, PartialHtml partialHtml){
   okBodyResponse(response, partialHtml.render(), ContentType.html);
 }
 
+
+void clientErrorResponse(SsrResponse response){
+  response.setStatus(400).close();
+}
