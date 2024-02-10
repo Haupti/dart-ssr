@@ -40,7 +40,7 @@ class SsrResponse {
   void _set() {
     _response.statusCode = _statusCode;
     for(MapEntry<String ,String> e in _headers.entries){
-      _response.headers.add(e.key, e.value);
+      _response.headers.set(e.key, e.value);
     }
   }
 
@@ -48,6 +48,7 @@ class SsrResponse {
     if(_locked){
       print("ERROR: cannot write, response is locked");
     }
+    _set();
     _response.write(body);
     _response.close();
     _locked = true;
