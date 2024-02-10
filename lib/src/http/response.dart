@@ -13,7 +13,11 @@ class SsrResponse {
 
   SsrResponse setStatus(int status) {
     if(!hasStatusSet){
-      _response.statusCode = status;
+      try{
+        _response.statusCode = status;
+      } catch (e) {
+        print("ERROR: setting status, headers already sent (?) $e");
+      }
       hasStatusSet = true;
     }
     else {
