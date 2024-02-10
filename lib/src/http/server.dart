@@ -16,20 +16,19 @@ void defaultHandleNotFound(HttpRequest request){
 
 void server(int port, List<RequestHandler> handlers) async {
   HttpServer server = await HttpServer.bind("localhost", port);
-  await server.forEach((HttpRequest request) {
+  await for (HttpRequest request in server) {
       bool isHandled = false;
       for (final h in handlers) {
         if(h.isResponsible(request)){
           isHandled = true;
           authWrapper(request, h);
-          request.response.close();
           break;
         }
       }
       if(!isHandled){
         defaultHandleNotFound(request);
       }
-  });
+  };
 }
 
 void sendWWWAuthenticate(SsrResponse response){
@@ -41,6 +40,8 @@ void sendWWWAuthenticate(SsrResponse response){
 void authWrapper(HttpRequest request, RequestHandler handler){
   if(handler.minimumRole == AuthRole.none){
     handler.handle(request, SsrResponse.createResponse(request));
+    request.response.flush();
+    request.response.close();
   }
 
   List<User> users = getUsers();
@@ -71,6 +72,8 @@ void authWrapper(HttpRequest request, RequestHandler handler){
       
   if(users.any((User user) => user.verifyBasicAuth(decodedAuth) && user.isAuthorized(handler.minimumRole))){
     handler.handle(request, SsrResponse.createResponse(request));
+    request.response.flush();
+    request.response.close();
   } else {
     sendWWWAuthenticate(SsrResponse.createResponse(request));
   }
@@ -80,7 +83,8 @@ void okBodyResponse(SsrResponse response, String body, ContentType contentType){
   response.setStatus(200)
           .setContentTypeHtmlHeader()
           .setContentLengthHeader(body.length)
-          .write(body);
+          .write(body)
+          .close();
 }
 
 void okHtmlResponse(SsrResponse response, RootPage body){
