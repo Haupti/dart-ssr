@@ -50,7 +50,11 @@ class SsrResponse {
 
   SsrResponse _writeHeaderOrWarn(String header, String value){
     if(!wasWritten){
-      _response.headers.set(header, value);
+      try{
+        _response.headers.set(header, value);
+      } catch (e) {
+        print("ERROR: header already set (?) $e");
+      }
     } else {
       print("SsrResponse warning: set...Header ignored. body was already written");
     }
