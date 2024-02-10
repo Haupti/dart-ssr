@@ -5,13 +5,13 @@ import '../html/root_page.dart';
 import '../html/partial_html.dart';
 import 'response.dart';
 import 'auth.dart';
+import 'request.dart';
 
 void defaultHandleNotFound(HttpRequest request){
   SsrResponse.createResponse(request)
     .setStatus(404)
     .setContentTypeHtmlHeader()
-    .write("<h1> page not found </h1>")
-    .close();
+    .write("<h1> page not found </h1>");
 }
 
 void server(int port, List<RequestHandler> handlers) async {
@@ -37,12 +37,14 @@ void sendWWWAuthenticate(SsrResponse response){
           .close();
 }
 
-void authWrapper(HttpRequest request, RequestHandler handler){
+void authWrapper(HttpRequest request, RequestHandler handler) async {
   if(handler.minimumRole == AuthRole.none){
-    handler.handle(request, SsrResponse.createResponse(request));
-    request.response.flush();
-    request.response.close();
+    SsrResponse reponse = SsrResponse.createResponse(request);
+    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request));
+    handler.handle(ssrRequest, reponse);
+    return;
   }
+  print("should not");
 
   List<User> users = getUsers();
 
@@ -71,9 +73,8 @@ void authWrapper(HttpRequest request, RequestHandler handler){
   }
       
   if(users.any((User user) => user.verifyBasicAuth(decodedAuth) && user.isAuthorized(handler.minimumRole))){
-    handler.handle(request, SsrResponse.createResponse(request));
-    request.response.flush();
-    request.response.close();
+    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request));
+    handler.handle(ssrRequest, SsrResponse.createResponse(request));
   } else {
     sendWWWAuthenticate(SsrResponse.createResponse(request));
   }
@@ -83,8 +84,7 @@ void okBodyResponse(SsrResponse response, String body, ContentType contentType){
   response.setStatus(200)
           .setContentTypeHtmlHeader()
           .setContentLengthHeader(body.length)
-          .write(body)
-          .close();
+          .write(body);
 }
 
 void okHtmlResponse(SsrResponse response, RootPage body){
