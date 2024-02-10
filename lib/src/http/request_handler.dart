@@ -7,7 +7,8 @@ enum RequestMethod {
   mGet(key:"GET"),
   mPost(key:"POST"),
   mPut(key:"PUT"),
-  mOption(key:"OPTION");
+  mOption(key:"OPTION"),
+  mDelete(key:"DELETE");
 
   const RequestMethod({
     required this.key
