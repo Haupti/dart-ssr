@@ -4,11 +4,18 @@ class Style {
   Style({
     String? color,
     String? width,
+    String? minWidth,
+    String? maxWidth,
     String? height,
+    String? minHeight,
+    String? maxHeight,
     String? display,
     String? flexDirection,
     String? justifyContent,
     String? alignItems,
+    String? alignContent,
+    String? flexFlow,
+    String? flexWrap,
     String? gap,
     String? textDecoration,
     String? backgroundColor,
@@ -16,16 +23,40 @@ class Style {
     String? borderBottom,
     String? borderRadius,
     String? boxShadow,
+    String? resize,
     String? lineHeight,
     String? verticalAlign,
     String? cursor,
     String? fontSize,
-    String? minWidth,
     String? padding,
     String? margin,
     String? textAlign,
     String? borderCollapse,
+    String? position,
+    String? zIndex,
+    String? overflow,
     }){
+    if(flexWrap != null){
+      property["flex-wrap"] = flexWrap;
+    }
+    if(flexFlow != null){
+      property["flex-flow"] = flexFlow;
+    }
+    if(alignContent != null){
+      property["align-content"] = alignContent;
+    }
+    if(resize != null){
+      property["resize"] = resize;
+    }
+    if(overflow != null){
+      property["overflow"] = overflow;
+    }
+    if(zIndex != null){
+      property["z-index"] = zIndex;
+    }
+    if(position != null){
+      property["position"] = position;
+    }
     if(borderCollapse != null){
       property["border-collapse"] = borderCollapse;
     }
@@ -37,6 +68,15 @@ class Style {
     }
     if(padding != null){
       property["padding"] = padding;
+    }
+    if(maxHeight != null){
+      property["max-height"] = maxHeight;
+    }
+    if(minHeight != null){
+      property["min-height"] = minHeight;
+    }
+    if(maxWidth != null){
+      property["max-width"] = maxWidth;
     }
     if(minWidth != null){
       property["min-width"] = minWidth;
