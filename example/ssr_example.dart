@@ -3,7 +3,6 @@ import 'package:ssr/src/http/auth.dart';
 import 'package:ssr/src/http/request.dart';
 import 'package:ssr/src/http/request_handler.dart';
 import 'package:ssr/src/http/response.dart';
-import 'package:ssr/src/html/root_page.dart';
 import 'package:ssr/src/http/server.dart';
 
 class MyComponent implements Component {

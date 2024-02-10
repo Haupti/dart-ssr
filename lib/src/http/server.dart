@@ -44,7 +44,6 @@ void authWrapper(HttpRequest request, RequestHandler handler) async {
     handler.handle(ssrRequest, reponse);
     return;
   }
-  print("should not");
 
   List<User> users = getUsers();
 
