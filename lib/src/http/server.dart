@@ -2,6 +2,7 @@ import 'dart:io';
 import "dart:convert";
 import 'request_handler.dart';
 import '../html/root_page.dart';
+import '../html/partial_html.dart';
 import 'response.dart';
 import 'auth.dart';
 
@@ -84,5 +85,9 @@ void okBodyResponse(SsrResponse response, String body, ContentType contentType){
 
 void okHtmlResponse(SsrResponse response, RootPage body){
   okBodyResponse(response, body.renderPage(), ContentType.html);
+}
+
+void okPartialHtmlResponse(SsrResponse response, PartialHtml partialHtml){
+  okBodyResponse(response, partialHtml.render(), ContentType.html);
 }
 
