@@ -1,9 +1,25 @@
 import 'dart:math';
+import 'package:ssr/html.dart';
+
 import 'style.dart';
 
-class Component{
-  String render() => "";
+class _ComponentImpl implements Component{
+  final String _htmlStr;
+  _ComponentImpl(this._htmlStr);
+
+  @override
+  String render(){
+    return _htmlStr;
+  }
 }
+
+abstract interface class Component{
+  String render();
+  static Component fromHtmlString(String staticHtml){
+    return _ComponentImpl(staticHtml);
+  }
+}
+
 
 String renderMany(List<Component> components){
   String result = "";

@@ -2,7 +2,7 @@ import 'dart:io';
 import "dart:convert";
 import 'request_handler.dart';
 import '../html/root_page.dart';
-import '../html/partial_html.dart';
+import '../html/component.dart';
 import 'response.dart';
 import 'auth.dart';
 import 'request.dart';
@@ -90,11 +90,15 @@ void okHtmlResponse(SsrResponse response, RootPage body){
   okBodyResponse(response, body.renderPage(), ContentType.html);
 }
 
-void okPartialHtmlResponse(SsrResponse response, PartialHtml partialHtml){
-  okBodyResponse(response, partialHtml.render(), ContentType.html);
+void okPartialHtmlResponse(SsrResponse response, Component component){
+  okBodyResponse(response, component.render(), ContentType.html);
 }
 
 
 void clientErrorResponse(SsrResponse response){
+  response.setStatus(400).close();
+}
+
+void clientErrorPartialHtmlResponse(SsrResponse response, Component partialHtml){
   response.setStatus(400).close();
 }
