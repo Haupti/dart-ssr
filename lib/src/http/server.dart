@@ -19,7 +19,7 @@ void server(int port, List<RequestHandler> handlers) async {
   await for (HttpRequest request in server) {
       bool isHandled = false;
       for (final h in handlers) {
-        if(h.isResponsible(request)){
+        if(h.isResponsible(request.method, request.uri.path)){
           isHandled = true;
           authWrapper(request, h);
           break;
@@ -40,7 +40,7 @@ void sendWWWAuthenticate(SsrResponse response){
 void authWrapper(HttpRequest request, RequestHandler handler) async {
   if(handler.minimumRole == AuthRole.none){
     SsrResponse reponse = SsrResponse.createResponse(request);
-    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request));
+    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request), request.method, request.uri.path, request.uri.queryParameters);
     handler.handle(ssrRequest, reponse);
     return;
   }
@@ -72,7 +72,7 @@ void authWrapper(HttpRequest request, RequestHandler handler) async {
   }
       
   if(users.any((User user) => user.verifyBasicAuth(decodedAuth) && user.isAuthorized(handler.minimumRole))){
-    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request));
+    SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request), request.method, request.uri.path, request.uri.queryParameters);
     handler.handle(ssrRequest, SsrResponse.createResponse(request));
   } else {
     sendWWWAuthenticate(SsrResponse.createResponse(request));

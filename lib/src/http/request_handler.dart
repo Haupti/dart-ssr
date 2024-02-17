@@ -33,8 +33,8 @@ class RequestHandler{
     return this;
   }
 
-  bool isResponsible(HttpRequest request){
-    return request.method == method.key && request.uri.path == path;
+  bool isResponsible(String requestMethod, String requestPath){
+    return requestMethod == method.key && requestPath == path;
   }
 
   void handle(SsrRequest request, SsrResponse response) {
