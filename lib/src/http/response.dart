@@ -65,7 +65,7 @@ class SsrResponse {
     _locked = true;
   }
 
-  void writeBytes(ByteBuffer body) {
+  void writeBytes(Uint8List body) {
     if(_locked){
       print("ERROR: cannot write, response is locked");
     }

@@ -102,15 +102,13 @@ void okResponse(SsrResponse response, {String? body, String? headerName, String?
   }
 }
 
-void okBytesResponse(SsrResponse response, ByteBuffer bytes, ContentType? contentType){
+void okBytesResponse(SsrResponse response, Uint8List bytes, ContentType? contentType){
   if(contentType != null){
     response.setStatus(200)
-          .setContentLengthHeader(bytes.lengthInBytes)
           .setContentTypeHeader(contentType)
           .writeBytes(bytes);
   } else {
     response.setStatus(200)
-          .setContentLengthHeader(bytes.lengthInBytes)
           .writeBytes(bytes);
   }
 }
