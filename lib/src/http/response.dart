@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 class SsrResponse {
   final HttpResponse _response;
@@ -32,6 +33,16 @@ class SsrResponse {
     return this;
   }
 
+  SsrResponse setContentTypeHeader(ContentType contentType) {
+    _headers[HttpHeaders.contentTypeHeader] = contentType.value;
+    return this;
+  }
+
+  SsrResponse setHeader(String header, String value) {
+    _headers[header] = value;
+    return this;
+  }
+
   SsrResponse setContentLengthHeader(int length) {
     _headers[HttpHeaders.contentLengthHeader] = "$length";
     return this;
@@ -45,6 +56,16 @@ class SsrResponse {
   }
 
   void write(String body) {
+    if(_locked){
+      print("ERROR: cannot write, response is locked");
+    }
+    _set();
+    _response.write(body);
+    _response.close();
+    _locked = true;
+  }
+
+  void writeBytes(Uint8List body) {
     if(_locked){
       print("ERROR: cannot write, response is locked");
     }

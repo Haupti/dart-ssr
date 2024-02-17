@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'auth.dart';
 import 'request.dart';
 import 'response.dart';

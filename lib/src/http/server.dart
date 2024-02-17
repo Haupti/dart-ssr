@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import "dart:convert";
 import 'request_handler.dart';
 import '../html/root_page.dart';
@@ -81,9 +82,37 @@ void authWrapper(HttpRequest request, RequestHandler handler) async {
 
 void okBodyResponse(SsrResponse response, String body, ContentType contentType){
   response.setStatus(200)
-          .setContentTypeHtmlHeader()
+          .setContentTypeHeader(contentType) 
           .setContentLengthHeader(body.length)
           .write(body);
+}
+
+void okResponse(SsrResponse response, {String? body, String? headerName, String? headerValue}){
+  if(body != null && headerName != null && headerValue != null){
+    response.setStatus(200)
+          .setContentLengthHeader(body.length)
+          .setHeader(headerName, headerValue)
+          .write(body);
+  } else if (body == null && headerName != null && headerValue != null) {
+    response.setStatus(200)
+          .setHeader(headerName, headerValue)
+          .close();
+  } else if ((headerName != null && headerValue == null) || (headerName == null && headerValue != null)) {
+    throw Exception("either header name and header value must be set, or both must not be set");
+  }
+}
+
+void okBytesResponse(SsrResponse response, Uint8List bytes, ContentType? contentType){
+  if(contentType != null){
+    response.setStatus(200)
+          .setContentLengthHeader(bytes.length)
+          .setContentTypeHeader(contentType)
+          .writeBytes(bytes);
+  } else {
+    response.setStatus(200)
+          .setContentLengthHeader(bytes.length)
+          .writeBytes(bytes);
+  }
 }
 
 void okHtmlResponse(SsrResponse response, RootPage body){
