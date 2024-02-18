@@ -102,14 +102,14 @@ void okResponse(SsrResponse response, {String? body, String? headerName, String?
   }
 }
 
-void okBytesResponse(SsrResponse response, Uint8List bytes, ContentType? contentType){
+void okFileResponse(SsrResponse response, File file, ContentType? contentType){
   if(contentType != null){
     response.setStatus(200)
           .setContentTypeHeader(contentType)
-          .writeBytes(bytes);
+          .addStream(file);
   } else {
     response.setStatus(200)
-          .writeBytes(bytes);
+          .addStream(file);
   }
 }
 

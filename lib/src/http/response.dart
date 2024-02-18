@@ -65,13 +65,14 @@ class SsrResponse {
     _locked = true;
   }
 
-  void writeBytes(Uint8List body) {
+  void addStream(File file) {
     if(_locked){
       print("ERROR: cannot write, response is locked");
     }
     _set();
-    _response.write(body);
-    _response.close();
+    _response.addStream(file.readAsBytes().asStream()).whenComplete((){
+      _response.close();
+    });
     _locked = true;
   }
 
