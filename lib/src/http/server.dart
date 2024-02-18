@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import "dart:convert";
 import 'request_handler.dart';
 import '../html/root_page.dart';
@@ -15,14 +14,14 @@ void defaultHandleNotFound(HttpRequest request){
     .write("<h1> page not found </h1>");
 }
 
-void server(int port, List<RequestHandler> handlers) async {
+void server(int port, List<RequestHandler> handlers, File usersFile) async {
   HttpServer server = await HttpServer.bind("localhost", port);
   await for (HttpRequest request in server) {
       bool isHandled = false;
       for (final h in handlers) {
         if(h.isResponsible(request.method, request.uri.path)){
           isHandled = true;
-          authWrapper(request, h);
+          authWrapper(request, h, usersFile);
           break;
         }
       }
@@ -38,7 +37,7 @@ void sendWWWAuthenticate(SsrResponse response){
           .close();
 }
 
-void authWrapper(HttpRequest request, RequestHandler handler) async {
+void authWrapper(HttpRequest request, RequestHandler handler, File usersFile) async {
   if(handler.minimumRole == AuthRole.none){
     SsrResponse reponse = SsrResponse.createResponse(request);
     SsrRequest ssrRequest = SsrRequest(await utf8.decodeStream(request), request.method, request.uri.path, request.uri.queryParameters);
@@ -46,7 +45,7 @@ void authWrapper(HttpRequest request, RequestHandler handler) async {
     return;
   }
 
-  List<User> users = getUsers();
+  List<User> users = getUsers(usersFile);
 
   String? authHeader = request.headers.value(HttpHeaders.authorizationHeader);
   if(authHeader == null || !authHeader.contains(RegExp(r'Basic .*'))){

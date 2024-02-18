@@ -53,8 +53,6 @@ class User {
   }
 }
 
-File usersFile = File("data/users.json");
-
 User? currentUser;
 AuthRole getCurrentAuthorizedUserRole() {
   if(currentUser != null){
@@ -64,7 +62,7 @@ AuthRole getCurrentAuthorizedUserRole() {
   }
 }
 
-List<User> getUsers(){
+List<User> getUsers(File usersFile){
   if(!usersFile.existsSync()){
     return [];
   }

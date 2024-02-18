@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 class SsrResponse {
   final HttpResponse _response;

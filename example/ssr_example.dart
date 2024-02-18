@@ -1,4 +1,5 @@
 import 'package:ssr/html.dart';
+import 'dart:io';
 import 'package:ssr/src/http/auth.dart';
 import 'package:ssr/src/http/request.dart';
 import 'package:ssr/src/http/request_handler.dart';
@@ -27,5 +28,5 @@ RequestHandler gethandler() {
 
 
 void main() async {
-  server(8080, [handler(), gethandler()]);
+  server(8080, [handler(), gethandler()], File("uses.json"));
 }
