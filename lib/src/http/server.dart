@@ -125,6 +125,6 @@ void clientErrorResponse(SsrResponse response){
   response.setStatus(400).close();
 }
 
-void clientErrorPartialHtmlResponse(SsrResponse response, Component partialHtml){
-  response.setStatus(400).close();
+void clientErrorBodyResponse(SsrResponse response, String responseBody){
+  response.setStatus(400).write(responseBody);
 }
